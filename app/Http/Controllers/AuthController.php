@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\RegisterRequest;
+use App\User;
 class AuthController extends Controller
 {
     /**
@@ -14,7 +15,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -80,4 +81,21 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
+    /**
+    * Handling the registration of new users and sending back token
+    */
+    public function register(RegisterRequest $request) {
+  
+       $user = User::create([
+                'first_name' => $request['first_name'],
+                'last_name' => $request['last_name'],
+                'email' => $request['email'],
+                'password' => bcrypt($request['password']),
+                'terms_and_conditions' => $request['terms_and_conditions']
+            ]);
+        
+           return $this->login($user->email, $user->password);
+        
+    }
+
 }
