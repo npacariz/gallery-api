@@ -16,4 +16,15 @@ class Image extends Model
         return $this->belongsTo(Gallery::class);
     }
 
+
+    public static function saveImages($images, $id) {
+        foreach($images as $img) {
+            self::create([
+                'image_url' => $img,
+                'gallery_id' => $id
+            ]);
+        }
+        return;
+    }
+
 }

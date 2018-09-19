@@ -22,4 +22,18 @@ class Comment extends Model
         return $this->belongsTo(Gallery::class);
      }
    
+     /**
+      * method for adding new comment
+      */
+      public static function addComment($request) {
+          $user = Auth()->user()->id;
+            $newComment = self::create([
+                "body" => $request['body'],
+                    "gallery_id" => $request['gallery_id'],
+                    'user_id' =>  $user,
+            ]);
+
+            $comment = Comment::with('user')->where('id', $newComment->id)->get();
+            return $comment;
+      }
 }

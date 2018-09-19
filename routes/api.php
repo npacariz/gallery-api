@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 
 
 Route::resource('galleries', 'GalleryController');
+Route::resource('comments', 'CommentController');
 Route::get('my-galleries', 'MyGalleryController@index');
 Route::get('author-galleries', 'UserController@index');
 Route::group([

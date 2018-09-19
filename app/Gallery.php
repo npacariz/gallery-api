@@ -53,6 +53,8 @@ class Gallery extends Model
             }); 
 
             $count = $query->count();
+
+            //If there is no galleries return error message
             if($count === 0) {
                 abort(404, "No galleries found");
             }
@@ -70,4 +72,19 @@ class Gallery extends Model
             return Gallery::with('user', 'images', 'comments.user')
                             ->findOrFail($id);
         }
+
+        /**
+         * Method for saving gallery
+         */
+        public static function saveGallery($request) 
+        {
+            $user = Auth()->user()->id;
+           return  self::create([
+                'title' => $request['title'],
+                'descriptions' => $request['descriptions'],
+                'user_id' => $user
+            ]);
+           
+        }
+
 }
