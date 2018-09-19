@@ -45,7 +45,7 @@ class GalleryController extends Controller
      */
     public function show($id)
     {
-        //
+        return Gallery::getSingleGallery($id);
     }
 
     /**
