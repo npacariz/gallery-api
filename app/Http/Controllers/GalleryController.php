@@ -8,6 +8,11 @@ use App\Image;
 use App\Http\Requests\GalleryRequest;
 class GalleryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -81,12 +86,12 @@ class GalleryController extends Controller
             abort(403, "Can't edit gallery if you are not owner"); 
         }
       
-        $updatedGallery->update([
+        $galleryForUpdate->update([
             "title" => $request['title'],
             "description" => $request['description'],
         ]);
 
-        $updatedGallery->images()->delete();
+        $galleryForUpdate->images()->delete();
 
         Image::saveImages($request->images, $gallery);
         return $gallery;

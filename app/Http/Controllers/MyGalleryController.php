@@ -7,6 +7,11 @@ use App\Gallery;
 
 class MyGalleryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Method for getting galleries from login user
      * using gallery model 
