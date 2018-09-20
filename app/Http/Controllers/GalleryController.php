@@ -36,7 +36,6 @@ class GalleryController extends Controller
      */
     public function store(GalleryRequest $request)
     {
-
         $gallery = Gallery::saveGallery($request);
         Image::saveImages($request->images, $gallery->id);
         return $gallery;
@@ -82,8 +81,14 @@ class GalleryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($gallery)
+    {   
+        $galleryCheck = Gallery::findOrFail($gallery);
+        //if authenticated user is not owner of gallery don't let him delete gallery
+        $user_id = Auth()->user()->id;
+        if($user_id !== $galleryCheck->user_id){
+            abort(403, "Can't delete gallery if you are not owner"); 
+        }
+        return Gallery::destroy($gallery);
     }
 }
