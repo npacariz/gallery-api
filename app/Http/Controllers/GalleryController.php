@@ -70,9 +70,27 @@ class GalleryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(GalleryRequest $request, $gallery)
     {
-        //
+        
+        //checking if authenticated user editing his gallery
+        $galleryForUpdate = Gallery::findOrFail($gallery);
+        $user =  Auth()->user()->id;
+        if($galleryForUpdate->user_id !== $user) {
+            //if authenticated is not owner of this gallery ruturn error 
+            abort(403, "Can't edit gallery if you are not owner"); 
+        }
+      
+        $updatedGallery->update([
+            "title" => $request['title'],
+            "description" => $request['description'],
+        ]);
+
+        $updatedGallery->images()->delete();
+
+        Image::saveImages($request->images, $gallery);
+        return $gallery;
+
     }
 
     /**

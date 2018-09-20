@@ -85,6 +85,6 @@ class Gallery extends Model
             'user_id' => $user
         ]);
         
-    }   
+    }
 
 }
