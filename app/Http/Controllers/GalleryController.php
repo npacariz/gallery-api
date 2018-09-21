@@ -78,23 +78,10 @@ class GalleryController extends Controller
     public function update(GalleryRequest $request, $gallery)
     {
         
-        //checking if authenticated user editing his gallery
-        $galleryForUpdate = Gallery::findOrFail($gallery);
-        $user =  Auth()->user()->id;
-        if($galleryForUpdate->user_id !== $user) {
-            //if authenticated is not owner of this gallery ruturn error 
-            abort(403, "Can't edit gallery if you are not owner"); 
-        }
-      
-        $galleryForUpdate->update([
-            "title" => $request['title'],
-            "description" => $request['description'],
-        ]);
-
+        $galleryForUpdate = Gallery::updateGallery($request, $gallery);
         $galleryForUpdate->images()->delete();
-
         Image::saveImages($request->images, $gallery);
-        return $gallery;
+        return $galleryForUpdate;
 
     }
 
@@ -106,12 +93,6 @@ class GalleryController extends Controller
      */
     public function destroy($gallery)
     {   
-        $galleryCheck = Gallery::findOrFail($gallery);
-        //if authenticated user is not owner of gallery don't let him delete gallery
-        $user_id = Auth()->user()->id;
-        if($user_id !== $galleryCheck->user_id){
-            abort(403, "Can't delete gallery if you are not owner"); 
-        }
-        return Gallery::destroy($gallery);
+       return Gallery::deleteGallery($gallery);
     }
 }

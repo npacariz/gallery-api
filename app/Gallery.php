@@ -86,5 +86,39 @@ class Gallery extends Model
         ]);
         
     }
+    /**
+     * Method for updating gallery
+     */
+    public static function updateGallery($request, $gallery)
+    {
+        //checking if authenticated user editing his gallery
+        $galleryForUpdate = self::findOrFail($gallery);
+        $user =  Auth()->user()->id;
+        if($galleryForUpdate->user_id !== $user) {
+            //if authenticated is not owner of this gallery ruturn error 
+            abort(401, "Can't edit gallery if you are not owner"); 
+        }
+      
+        $galleryForUpdate->update([
+            "title" => $request['title'],
+            "description" => $request['description'],
+        ]);
 
+        return $galleryForUpdate;
+    }
+
+    /**
+     * Method for deleting gallery
+     */
+
+    public static function deleteGallery($gallery) {
+
+        $galleryCheck = Gallery::findOrFail($gallery);
+        //if authenticated user is not owner of gallery don't let him delete gallery
+        $user_id = Auth()->user()->id;
+        if($user_id !== $galleryCheck->user_id){
+            abort(403, "Can't delete gallery if you are not owner"); 
+        }
+        return self::destroy($gallery);
+    }
 }
