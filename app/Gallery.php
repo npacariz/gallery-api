@@ -53,10 +53,7 @@ class Gallery extends Model
         }); 
 
         $count = $query->count();
-        //If there is no galleries return error message
-        if($count === 0) {
-            abort(404, "No galleries found");
-        }
+
         //Pagination with descending order
         $galleries = $query->skip(($page-1) * 10)
                             ->take(10)
