@@ -11,9 +11,8 @@ class UserController extends Controller
      * Method for getting all galleries from specific user 
      * using gallery model 
      */
-    public function index(Request $request)
+    public function index(Request $request, $id)
     {
-        $user = $request['id'];
-        return Gallery::getGalleries($request, $user);
+        return Gallery::getGalleries($request, $id);
     }
 }
