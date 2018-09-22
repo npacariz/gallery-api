@@ -65,7 +65,12 @@ class GalleryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $gallery = Gallery::getSingleGallery($id);
+        $user_id = Auth()->user()->id;
+        if($gallery->user_id !== $user_id) {
+            abort(401, "Can't edit galleries of another user");
+        }
+        return $gallery;
     }
 
     /**

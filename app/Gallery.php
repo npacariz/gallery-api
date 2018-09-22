@@ -95,7 +95,7 @@ class Gallery extends Model
         $galleryForUpdate = self::findOrFail($gallery);
         $user =  Auth()->user()->id;
         if($galleryForUpdate->user_id !== $user) {
-            //if authenticated is not owner of this gallery ruturn error 
+            //if authenticated is not owner of this gallery return error 
             abort(401, "Can't edit gallery if you are not owner"); 
         }
       
@@ -117,7 +117,7 @@ class Gallery extends Model
         //if authenticated user is not owner of gallery don't let him delete gallery
         $user_id = Auth()->user()->id;
         if($user_id !== $galleryCheck->user_id){
-            abort(403, "Can't delete gallery if you are not owner"); 
+            abort(401, "Can't delete gallery if you are not owner"); 
         }
         return self::destroy($gallery);
     }
